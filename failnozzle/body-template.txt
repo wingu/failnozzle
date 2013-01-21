@@ -1,0 +1,34 @@
+{%- macro plural(count, singular, plural, show_count=True) -%}
+  {{- count if show_count }} {% if count == 1 -%}
+    {{ singular }}
+  {%- else -%}
+    {{ plural }}
+  {%- endif -%}
+{%- endmacro -%}
+
+** {{ plural(total, 'instance', 'instances') }} of {{ plural(total_unique, 'unique error', 'unique errors') }} ({{ ', '.join(kinds) }}) **
+
+========
+Summary:
+========
+{%- for message, info in sorted_counts %}
+{{ info.total }}X {{ message.message }} (in {{ message.kind }}, {{ message.pathname }}:{{ message.lineno }})
+{%- endfor %}
+  
+========
+Details:
+========
+{%- for message, info in sorted_counts %}
+Exception #{{ loop.index }} of {{ loop.length }}: {{ info.total }}X {{ message.message }} (in {{ message.kind }}, {{ message.pathname }}:{{ message.lineno }})
+
+Seen between {{ info.first_seen }} to {{ info.last_seen }}
+{%- for source, count in info.sources_sorted %} 
+- on {{ source }}, {{ count }}X
+{%- endfor %}
+
+{{ message.exc_text }}
+{%- if not loop.last %}
+----------------------------------------------------------------------
+{% endif -%}
+{%- endfor %}
+[EOM]

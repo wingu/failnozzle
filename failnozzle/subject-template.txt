@@ -1,0 +1,1 @@
+{{ server_name }} errors: {{ total }} total, {{ total_unique }} unique ({{ ', '.join(kinds) }})
