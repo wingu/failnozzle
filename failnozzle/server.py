@@ -421,8 +421,8 @@ def is_not_just_monitoring_error(unique_message):
 # True if the presence of the message should be alerted to the
 # corresponding recipient.
 RECIP_MATCHERS = [
-    (setting('JUST_MONITORING_ERROR_MARKERS', ''), is_just_monitoring_error),
-    (setting('ERROR_RECIP', ''), is_not_just_monitoring_error)
+    (setting('JUST_MONITORING_REPORT_TO', ''), is_just_monitoring_error),
+    (setting('REPORT_TO', ''), is_not_just_monitoring_error)
     ]
 
 
@@ -454,7 +454,7 @@ def mailer(recips, subject, report):
     """
     if not recips:
         logging.error("Recips was empty, adding error recip")
-        recips.append(setting('ERROR_RECIP', ''))
+        recips.append(setting('REPORT_TO', ''))
     logging.info('Mailer is emailing, subject = %r', subject)
     send_email(setting('REPORT_FROM', ''), ', '.join(recips), subject, report)
 

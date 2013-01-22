@@ -97,8 +97,8 @@ Some relevant settings are as follows:
 * `SMTP_USER`, `SMTP_PASSWORD`: if necessary, the username and password for
   authenticating to the SMTP server
 * `REPORT_FROM`: the "From" address for summary emails sent by `failnozzle`
-* `ERROR_RECIP`: the destination address for summary emails
-* `JUST_MONITORING_ERROR_RECIP`: the destination address for reports that
+* `REPORT_TO`: the destination address for summary emails
+* `JUST_MONITORING_REPORT_TO`: the destination address for reports that
   contain only "just monitoring" messages (for end-to-end monitoring)
 * `MONITORING_ERROR_MARKERS`: a list of marker strings that signals `failnozzle`
   to treat a message as "just monitoring"

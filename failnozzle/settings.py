@@ -9,7 +9,7 @@ import os
 # Exception Email Settings                                                    #
 ###############################################################################
 # Address to send exception emails to
-# ERROR_RECIP = 'your.team@yourcompany.com'
+# REPORT_TO = 'your.team@yourcompany.com'
 # Address to send exception emails from
 # REPORT_FROM = 'error.reporter@yourcompany.com'
 # How often to send aggregated exception emails.
@@ -48,7 +48,7 @@ PAGER_LIMIT = 100
 # Allows routing errors with specific strings in them to a different email    #
 # address. To monitor that systems are correctly sending to failnozzle.       #
 ###############################################################################
-# JUST_MONITORING_ERROR_RECIP = 'error.canary@yourcompany.com'
+# JUST_MONITORING_REPORT_TO = 'error.canary@yourcompany.com'
 
 # Unambiguous strings to look for in exceptions which signify that the current
 # exception is not a real exception. Used to monitor that this service is
