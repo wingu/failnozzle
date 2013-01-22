@@ -249,11 +249,11 @@ UniqueMessage = namedtuple('UniqueMessage',
 def _get_unique_msg_tuple():
     """
     Gets the namedtuple to use to represent a unique message from
-    settings.UNIQUE_MSG_TUPLE.
+    the UNIQUE_MSG_TUPLE setting.
 
     If not specified will use failnozzle.server.UniqueMessage.
     """
-    return getattr(settings, 'UNIQUE_MSG_TUPLE', UniqueMessage)
+    return setting('UNIQUE_MSG_TUPLE', UniqueMessage)
 
 
 def processor(message_queue, message_buffer):
