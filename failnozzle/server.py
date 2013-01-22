@@ -32,22 +32,24 @@ from failnozzle import settings
 # pylint: disable=E1101
 
 
-_sentinel = object()
-def setting(name, default=_sentinel):
+_SENTINEL = object()
+
+
+def setting(name, default=_SENTINEL):
     """
     Return a setting value or a default if it is not present.
 
     Note that, unlike many getattr-like functions, if the caller does *not*
-    provide a default, and the setting is not found, this function will raise an
-    Exception.  That allows the code in this module to provide empty default
+    provide a default, and the setting is not found, this function will raise
+    an Exception.  That allows the code in this module to provide empty default
     values for certain settings -- so that unit testing doesn't require full
-    settings.  But, at the same time, for all other settings, if one is missing,
-    the code will fail loudly and specifically.
+    settings.  But, at the same time, for all other settings, if one is
+    missing, the code will fail loudly and specifically.
     """
     if hasattr(settings, name):
         return getattr(settings, name)
 
-    if default != _sentinel:
+    if default != _SENTINEL:
         return default
 
     raise Exception("Couldn't find setting %s" % name)
@@ -160,9 +162,9 @@ class MessageBuffer(object):
                 # Too general an exception but we want to make sure we recover
                 # cleanly.
                 # pylint: disable=W0703
-                except Exception, e:
+                except Exception, exc:
                     # pylint: disable=E1205
-                    logging.exception('Could not render report', e)
+                    logging.exception('Could not render report', exc)
 
             self.counts_by_unique.clear()
             return subject, report, unique_messages
@@ -236,9 +238,13 @@ class MessageRate(object):
         self.counts = []
 
 
+# namedtuples are class-like in usage, so ignore Pylint's objection
+# pylint: disable=C0103
 UniqueMessage = namedtuple('UniqueMessage',
                            ['module', 'funcName', 'filename', 'message',
                             'pathname', 'lineno', 'exc_text', 'kind'])
+# pylint: enable=C0103
+
 
 def _get_unique_msg_tuple():
     """
@@ -361,7 +367,8 @@ def flusher(message_buffer, message_rate):
     # Check the message rate, not including "just monitoring" messages
     # in the message rate.  TODO: at some point, if this becomes more
     # complex, make it more config-y.
-    total_matching = message_buffer.total_matching(is_not_just_monitoring_error)
+    total_matching = message_buffer.total_matching(
+        is_not_just_monitoring_error)
     logging.debug("Found %d non-monitoring messages, %d total",
                   total_matching, message_buffer.total)
     exceeded, total = message_rate.add_and_check(total_matching)
@@ -494,8 +501,8 @@ def send_email(from_addr, to_addr, subject, body):
     # Too general an exception but we want to make sure we recover/log
     # cleanly.
     # pylint: disable=W0703
-    except Exception, e:
-        logging.exception('Error sending email "%s": %s', subject, e)
+    except Exception, exc:
+        logging.exception('Error sending email "%s": %s', subject, exc)
 
 
 def _create_queue_rate_buffer():
@@ -527,19 +534,14 @@ def _validate_settings():
     """
     Validate the settings to make sure we are sane.
     """
-
-    # The below ar required for actual server deployment
-    required_params = [ '',
-                        ]
-
     # The below can be over-ridden to customize.  If they are, they must be
     # non-null.
-    not_none_params = [ 'EMAIL_BODY_TEMPLATE',
-                        'EMAIL_SUBJECT_TEMPLATE',
-                        'EMAIL_TEMPLATE_DIR',
-                        'INTERNAL_ERROR_FUNC',
-                        'SOURCE_FIELD_NAME',
-                        'UNIQUE_MSG_TUPLE']
+    not_none_params = ['EMAIL_BODY_TEMPLATE',
+                       'EMAIL_SUBJECT_TEMPLATE',
+                       'EMAIL_TEMPLATE_DIR',
+                       'INTERNAL_ERROR_FUNC',
+                       'SOURCE_FIELD_NAME',
+                       'UNIQUE_MSG_TUPLE']
 
     for param in not_none_params:
         val = getattr(settings, param, 'X')
@@ -552,7 +554,8 @@ def main():
     packets, handing them off to those greenlets.
     """
     # Yes, friends, the log aggregator does some logging of its own.
-    logging.basicConfig(level=setting('LOG_LEVEL'), format=setting('LOG_FORMAT'))
+    logging.basicConfig(level=setting('LOG_LEVEL'),
+                        format=setting('LOG_FORMAT'))
     logging.info('Starting up')
 
     if len(sys.argv) > 1:
@@ -596,13 +599,16 @@ def main():
         # Too general an exception but we want to make sure we recover
         # cleanly.
         # pylint: disable=W0703
-        except Exception, e:
+        except Exception, exc:
             count += 1
-            logging.exception('Error on incoming packet: %s', e)
-            message_queue.put(_make_fake_record(count, e))
+            logging.exception('Error on incoming packet: %s', exc)
+            message_queue.put(_make_fake_record(count, exc))
 
 
 def _default_fake_record(count, exception):
+    """
+    Creates the default fake record
+    """
     fake_record = dict(module='unknown',
                            funcName='unknown',
                            filename='unknown',
@@ -621,7 +627,7 @@ def _make_fake_record(count, exception):
     filled in, so we don't get any untoward exceptions that break
     everything.
     """
-    # Get the overridden function for creating a fake record or use our default.
+    # Get the overridden function for creating a fake record or our default.
     fake_record_fn = getattr(settings,
                              'INTERNAL_ERROR_FUNC',
                              _default_fake_record)

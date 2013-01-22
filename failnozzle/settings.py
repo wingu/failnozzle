@@ -75,12 +75,13 @@ SOURCE_FIELD_NAME = 'source'
 
 # Defines Jinja2 templates to use for rendering of an exception email
 # body/subject
-EMAIL_BODY_TEMPLATE='body-template.txt'
-EMAIL_SUBJECT_TEMPLATE='subject-template.txt'
+EMAIL_BODY_TEMPLATE = 'body-template.txt'
+EMAIL_SUBJECT_TEMPLATE = 'subject-template.txt'
 
-# When an internal error occurs we will attempt to communicate using failnozzle.
-# This function will take the parameters count and exception and generate
-# a dict that will eventually be converted to the class set to UNIQUE_MSG_IMPL.
+# When an internal error occurs we will attempt to communicate using
+# failnozzle. This function will take the parameters count and exception
+# and generate a dict that will eventually be converted to the class set
+# to UNIQUE_MSG_IMPL.
 # INTERNAL_ERROR_FUNC = <internal error func>
 
 ###############################################################################
@@ -110,6 +111,7 @@ if os.path.exists(deploy_file):
 local_file = os.path.join(base_dir, 'local_settings.py')
 if os.path.exists(local_file):
     execfile(local_file)
+
 
 def import_config_file(config_file):
     """

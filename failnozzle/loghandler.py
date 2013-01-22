@@ -5,7 +5,6 @@ instead of python's pickle format.
 """
 import json
 import logging.handlers
-import struct
 
 
 class AggregatorHandler(logging.handlers.DatagramHandler):
@@ -34,17 +33,17 @@ class AggregatorHandler(logging.handlers.DatagramHandler):
         See logging.handlersSocketHandler.makePickle, we follow the same
         conventions and logic only w/ JSON rather than pickle.
         """
-        ei = record.exc_info
-        if ei:
+        exc_info = record.exc_info
+        if exc_info:
             # just to get traceback text into record.exc_text
             dummy = self.format(record)
             # to avoid json error
             record.exc_info = None
-        s = json.dumps(record.__dict__)
+        str_ = json.dumps(record.__dict__)
         # for next handler
-        if ei:
-            record.exc_info = ei
-        return s
+        if exc_info:
+            record.exc_info = exc_info
+        return str_
 
     def emit(self, record):
         """
