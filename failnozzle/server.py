@@ -211,7 +211,7 @@ class MessageCounts(object):
 class MessageRate(object):
     """
     Tracks the rate of incoming messages, determining whether the number of
-    messages received within a window exceeds a threshhold.
+    messages received within a window exceeds a threshold.
     """
     def __init__(self, window, limit):
         self.window = window
