@@ -470,10 +470,6 @@ def pager(total):
     """
     Sends an email to the pager, alerting us of the total number of messages
     that it's received within the window.
-
-    Immediately returns if a lock file is in place, and places said file
-    immediately after sending a page email. This is so that we don't get paged
-    repeatedly; monit can warn us if this file is present for too long.
     """
     logging.info('Pager is emailing, count = %r', total)
     report = u'Danger: received %d errors within the alert window.' % total
