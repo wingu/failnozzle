@@ -24,6 +24,8 @@ class AggregatorHandler(logging.handlers.DatagramHandler):
         self.kind = kind
         super(AggregatorHandler, self).__init__(host, port)
 
+    # We're overriding a method, so we can't change the name
+    # pylint: disable=C0103
     def makePickle(self, record):
         """
         Marshalls the record, in this case to JSON rather than a pickle string
@@ -35,8 +37,8 @@ class AggregatorHandler(logging.handlers.DatagramHandler):
         """
         exc_info = record.exc_info
         if exc_info:
-            # just to get traceback text into record.exc_text
-            dummy = self.format(record)
+            # call format to get traceback text into record.exc_text
+            _ = self.format(record)
             # to avoid json error
             record.exc_info = None
         str_ = json.dumps(record.__dict__)
@@ -44,6 +46,7 @@ class AggregatorHandler(logging.handlers.DatagramHandler):
         if exc_info:
             record.exc_info = exc_info
         return str_
+    # pylint: enable=C0103
 
     def emit(self, record):
         """

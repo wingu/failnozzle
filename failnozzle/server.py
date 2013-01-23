@@ -509,9 +509,7 @@ def _create_queue_rate_buffer():
     """
     # Find the template directory, either our directory or user specified
     default_template_dir = os.path.dirname(__file__)
-    template_dir = getattr(settings,
-                           'EMAIL_TEMPLATE_DIR',
-                           default_template_dir) or default_template_dir
+    template_dir = setting('EMAIL_TEMPLATE_DIR', default_template_dir)
 
     env = Environment(loader=FileSystemLoader(template_dir))
 
@@ -540,7 +538,7 @@ def _validate_settings():
                        'UNIQUE_MSG_TUPLE']
 
     for param in not_none_params:
-        val = getattr(settings, param, 'X')
+        val = setting(param, 'X')
         assert val != None, 'Must specify a non-None value for %s' % param
 
 
@@ -576,6 +574,7 @@ def main():
         """
         flusher_greenlet = gevent.spawn(flusher, message_buffer, message_rate)
         flusher_greenlet.join()
+    # pylint: enable=W0612
 
     # Create a socket to listen to incoming messages.
     socket = gevent.socket.socket(family=gevent.socket.AF_INET,
@@ -624,9 +623,7 @@ def _make_fake_record(count, exception):
     everything.
     """
     # Get the overridden function for creating a fake record or our default.
-    fake_record_fn = getattr(settings,
-                             'INTERNAL_ERROR_FUNC',
-                             _default_fake_record)
+    fake_record_fn = setting('INTERNAL_ERROR_FUNC', _default_fake_record)
 
     return _ensure_message_params(fake_record_fn(count, exception))
 
