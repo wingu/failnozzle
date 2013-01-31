@@ -81,6 +81,27 @@ To use it from a `logging` file-based configuration,
     level=ERROR
     args=('failnozzle.example.com', 1549, os.uname()[1], 'myapp')
 
+If you want to use Failnozzle from a non-Python application, you'll
+get deduping and digest out of the box by sending json that looks like
+this:
+
+```
+{
+ "module": <your module name>,
+ "funcName": <your function name>,
+ "filename": <your file name>,
+ "pathname": <your path name>,
+ "lineno": <your line number>,
+ "message": <your error message>,
+ "exc_text": <the text of the exception, e.g. stack trace>,
+ "kind": <some discriminator, e.g. your app name>
+}
+```
+
+Alternatively, you can create your own named tuple with the fields you
+want to send in your JSON and override UNIQUE_MSG_TUPLE in the
+server's settings to that tuple name (see Configuration below for
+where to find settings).
 
 ## Configuration
 
