@@ -404,8 +404,8 @@ def is_just_monitoring_error(unique_message):
     monitoring (meaning that it contains the one of the
     JUST_MONITORING_ERROR_MARKERS somewhere in the exc_text)
     """
-    return any([(marker in str(unique_message.exc_text) or
-                 marker in str(unique_message.message))
+    return any([(marker in unicode(unique_message.exc_text) or
+                 marker in unicode(unique_message.message))
                 for marker
                 in setting('MONITORING_ERROR_MARKERS')])
 
