@@ -1,8 +1,10 @@
 """
 Settings for failnozzle.
 """
+import imp
 import logging
 import os
+import re
 
 
 ###############################################################################
@@ -119,7 +121,17 @@ def import_config_file(config_file):
     any of our initial settings
     """
     if os.path.exists(config_file):
-        execfile(config_file)
+        setting_re = re.compile("^[_A-Z]+$")
+        module = imp.load_source('failnozzle.config_file', config_file)
+
+        # Add all the GLOBAL_SETTINGS in the config_file to this module
+        overwrite_count = 0
+        for name in dir(module):
+            if setting_re.match(name):
+                globals()[name] = getattr(module, name)
+                overwrite_count += 1
+
+        print "Overwrote %s settings" % overwrite_count
     else:
         print "Config file %s not found" % config_file
         exit(1)

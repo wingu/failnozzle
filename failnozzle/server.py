@@ -418,6 +418,12 @@ def is_not_just_monitoring_error(unique_message):
     return not is_just_monitoring_error(unique_message)
 
 
+def deferred_setting(name, default):
+    """
+    Returns a function that calls settings with (name, default)
+    """
+    return lambda: setting(name, default)
+
 # patterns for figuring out which recipients should be added to an
 # error summary.  Note that we're not attempting to split out
 # different errors into different emails--if a recipient matches *any*
@@ -428,10 +434,23 @@ def is_not_just_monitoring_error(unique_message):
 # True if the presence of the message should be alerted to the
 # corresponding recipient.
 RECIP_MATCHERS = [
-    (setting('JUST_MONITORING_REPORT_TO', ''), is_just_monitoring_error),
-    (setting('REPORT_TO', ''), is_not_just_monitoring_error)
+    (deferred_setting('JUST_MONITORING_REPORT_TO', ''), is_just_monitoring_error),
+    (deferred_setting('REPORT_TO', ''), is_not_just_monitoring_error)
     ]
 
+
+def _get_recip_matchers():
+    """
+    Return an iterator over recipient matchers, handling any deferred
+    settings
+    """
+    for recip, matcher in RECIP_MATCHERS:
+        if callable(recip):
+            recip_value = recip()
+        else:
+            recip_value = recip
+
+        yield recip_value, matcher
 
 def calc_recips(unique_messages):
     """
@@ -446,7 +465,7 @@ def calc_recips(unique_messages):
     """
     recips = set()
     for unique_message in unique_messages:
-        for (recip, recip_matcher) in RECIP_MATCHERS:
+        for recip, recip_matcher in _get_recip_matchers():
             if recip_matcher(unique_message):
                 logging.debug("Matched against %s adding recip %s",
                               recip_matcher,
@@ -462,7 +481,7 @@ def mailer(recips, subject, report):
     if not recips:
         logging.error("Recips was empty, adding error recip")
         recips.append(setting('REPORT_TO', ''))
-    logging.info('Mailer is emailing, subject = %r', subject)
+    logging.info('Mailer is emailing, subject = %r, recipients=%r', subject, recips)
     send_email(setting('REPORT_FROM', ''), ', '.join(recips), subject, report)
 
 
