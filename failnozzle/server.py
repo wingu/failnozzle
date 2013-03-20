@@ -434,9 +434,11 @@ def deferred_setting(name, default):
 # True if the presence of the message should be alerted to the
 # corresponding recipient.
 RECIP_MATCHERS = [
-    (deferred_setting('JUST_MONITORING_REPORT_TO', ''), is_just_monitoring_error),
-    (deferred_setting('REPORT_TO', ''), is_not_just_monitoring_error)
-    ]
+    (deferred_setting('JUST_MONITORING_REPORT_TO', ''),
+        is_just_monitoring_error),
+    (deferred_setting('REPORT_TO', ''),
+        is_not_just_monitoring_error)
+]
 
 
 def _get_recip_matchers():
@@ -451,6 +453,7 @@ def _get_recip_matchers():
             recip_value = recip
 
         yield recip_value, matcher
+
 
 def calc_recips(unique_messages):
     """
@@ -481,7 +484,8 @@ def mailer(recips, subject, report):
     if not recips:
         logging.error("Recips was empty, adding error recip")
         recips.append(setting('REPORT_TO', ''))
-    logging.info('Mailer is emailing, subject = %r, recipients=%r', subject, recips)
+    logging.info('Mailer is emailing, subject = %r, recipients=%r',
+                 subject, recips)
     send_email(setting('REPORT_FROM', ''), ', '.join(recips), subject, report)
 
 
@@ -558,7 +562,7 @@ def _validate_settings():
 
     for param in not_none_params:
         val = setting(param, 'X')
-        assert val != None, 'Must specify a non-None value for %s' % param
+        assert val is not None, 'Must specify a non-None value for %s' % param
 
 
 def main():
@@ -624,14 +628,14 @@ def _default_fake_record(count, exception):
     Creates the default fake record
     """
     fake_record = dict(module='unknown',
-                           funcName='unknown',
-                           filename='unknown',
-                           pathname='unknown',
-                           lineno=0,
-                           exc_text='Internal error: %d %r' % (count,
-                                                               exception),
-                           kind='unknown',
-                           message='unknown')
+                       funcName='unknown',
+                       filename='unknown',
+                       pathname='unknown',
+                       lineno=0,
+                       exc_text='Internal error: %d %r' % (count,
+                                                           exception),
+                       kind='unknown',
+                       message='unknown')
     return fake_record
 
 

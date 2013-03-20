@@ -11,8 +11,8 @@ from jinja2.loaders import FileSystemLoader
 
 from failnozzle import server
 from failnozzle.server import calc_recips, flusher, is_just_monitoring_error, \
-        mailer, MessageBuffer, MessageCounts, MessageRate, \
-        _process_one_message, _package_unique_message, UniqueMessage, setting
+    mailer, MessageBuffer, MessageCounts, MessageRate, \
+    _process_one_message, _package_unique_message, UniqueMessage, setting
 
 
 # Fix path to import failnozzle
@@ -95,10 +95,12 @@ def test_is_just_monitoring_error():
         eq_(expected, is_just_monitoring_error(msg1))
         eq_(expected, is_just_monitoring_error(msg2))
 
-    for text, expected in [
+    data = [
         ("It's 1669fe88-b0c3-439d-bc10-8a3d21493ede", True),
         ("Oh, and c84a3673-0a95-447b-810f-8107e1e38013 is good too", True),
-        ("This is just a regular message", False)]:
+        ("This is just a regular message", False),
+    ]
+    for text, expected in data:
         yield check_is_just_monitoring_error, text, expected
 
 
@@ -109,7 +111,7 @@ def test_calc_recips():
     def check_calc_recips(msg, expected):
         "Patch the server's matchers and verify the patterns work as expected"
         with patch('failnozzle.server.RECIP_MATCHERS',
-                          new=list(server.RECIP_MATCHERS)) as matchers:
+                   new=list(server.RECIP_MATCHERS)) as matchers:
             for i, matcher in enumerate(matchers):
                 if matcher[1].__name__ == 'is_just_monitoring_error':
                     matchers[i] = (monitoring_to, matcher[1])
@@ -118,12 +120,13 @@ def test_calc_recips():
 
             eq_([expected], calc_recips([msg]))
 
-    for msg_text, expected in [
+    data = [
         ("Oho, 1669fe88-b0c3-439d-bc10-8a3d21493ede", monitoring_to),
-        ("This is a real actual error (sorta)", report_to)]:
+        ("This is a real actual error (sorta)", report_to),
+    ]
+    for msg_text, expected in data:
         msg = UniqueMessage('test', 'test', 'test', 'message text',
                             'test.py', 1, msg_text, 'app')
-
         yield check_calc_recips, msg, expected
 
 
@@ -274,7 +277,7 @@ def test_flusher_none(spawn, joinall):
 
     env = Environment(loader=FileSystemLoader(template_dir))
     message_buffer = MessageBuffer(env.get_template('subject-template.txt'),
-                               env.get_template('body-template.txt'))
+                                   env.get_template('body-template.txt'))
     flusher(message_buffer, message_rate)
 
     # We shouldn't have done anything
@@ -299,7 +302,7 @@ def test_flusher_message(spawn, joinall):
 
     env = Environment(loader=FileSystemLoader(template_dir))
     message_buffer = MessageBuffer(env.get_template('subject-template.txt'),
-                               env.get_template('body-template.txt'))
+                                   env.get_template('body-template.txt'))
 
     message = UniqueMessage('module', 'funcName', 'filename', 'message',
                             'pathname', 'lineno', 'exc_text', 'kind')
@@ -333,7 +336,7 @@ def test_flusher_rate_excede(spawn, joinall, pager, mailer):
 
     env = Environment(loader=FileSystemLoader(template_dir))
     message_buffer = MessageBuffer(env.get_template('subject-template.txt'),
-                               env.get_template('body-template.txt'))
+                                   env.get_template('body-template.txt'))
 
     for i in range(pager_limit + 1):
         message_buffer.add(UniqueMessage('module', 'funcName', 'filename',

@@ -8,7 +8,7 @@ import os
 import sys
 
 from failnozzle.server import _create_queue_rate_buffer, _make_fake_record, \
-        _process_one_message, _validate_settings
+    _process_one_message, _validate_settings
 
 
 # Fix path to import failnozzle
