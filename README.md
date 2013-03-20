@@ -45,6 +45,9 @@ install from `setup.py`:
     git clone https://github.com/wingu/failnozzle
     cd failnozzle; python setup.py install
 
+If you're developing failnozzle itself, clone the git repository and run `make`
+to set up a local virtualenv with the appropriate dependencies.
+
 
 ## Dependencies
 
@@ -227,6 +230,17 @@ To run the unit tests, you'll need the nose and mock packages.  Once those are
 installed, you can run the tests via:
 
     nosetests failnozzle
+
+If you used `make` to create a local development environment for your copy of
+this repository, you can run tests and PEP8/pylint checks with:
+
+    make check
+
+Which is an alias for the following tasks:
+
+    make pep8
+    make lint
+    make test
 
 
 [gevent]: http://www.gevent.org
