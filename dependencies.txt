@@ -1,0 +1,18 @@
+gevent==0.13.8
+Jinja2==2.6
+
+# dependencies for tests and development
+mock==1.0.1
+nose==1.2.1
+pep8==1.4.5
+pylint==0.27.0
+
+# implicit dependencies
+## gevent
+greenlet==0.4.0
+## pip
+wsgiref==0.1.2
+## pylint
+logilab-astng==0.24.2
+logilab-common==0.59.0
+
