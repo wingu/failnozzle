@@ -90,7 +90,12 @@ EMAIL_SUBJECT_TEMPLATE = 'subject-template.txt'
 # Internal Config                                                             #
 ###############################################################################
 # The name of this server
-SERVER_NAME = os.uname()[1]
+if hasattr(os, 'uname'):
+    SERVER_NAME = os.uname()[1]
+else:
+    # In case of Windows
+    import socket
+    SERVER_NAME = socket.gethostname()
 
 # Log configuration of this service.
 LOG_LEVEL = logging.DEBUG
