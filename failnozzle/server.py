@@ -486,7 +486,8 @@ def mailer(recips, subject, report):
         recips.append(setting('REPORT_TO', ''))
     logging.info('Mailer is emailing, subject = %r, recipients=%r',
                  subject, recips)
-    send_email(setting('REPORT_FROM', ''), ', '.join(recips), subject, report)
+    send_email(setting('REPORT_FROM', ''), ', '.join(recips),
+               setting('REPLY_TO', ''), subject, report)
 
 
 def pager(total):
@@ -497,10 +498,11 @@ def pager(total):
     logging.info('Pager is emailing, count = %r', total)
     report = u'Danger: received %d errors within the alert window.' % total
     send_email(setting('PAGER_FROM'), setting('PAGER_TO'),
+               setting('PAGER_REPLY_TO', ''),
                '%s error rate exceeded' % setting('SERVER_NAME'), report)
 
 
-def send_email(from_addr, to_addr, subject, body):
+def send_email(from_addr, to_addr, reply_to, subject, body):
     """
     Sends a text/plain email from `from_addr` to the address `to_addr`, with
     subject `subject` and body `body`, using the host, port, user, and password
@@ -511,6 +513,8 @@ def send_email(from_addr, to_addr, subject, body):
         msg['From'] = from_addr
         msg['To'] = to_addr
         msg['Subject'] = subject
+        if reply_to:
+            msg['Reply-To'] = reply_to
 
         smtp = smtplib.SMTP_SSL(setting('SMTP_HOST'), setting('SMTP_PORT'))
         smtp.login(setting('SMTP_USER'), setting('SMTP_PASSWORD'))

@@ -14,6 +14,8 @@ import re
 # REPORT_TO = 'your.team@yourcompany.com'
 # Address to send exception emails from
 # REPORT_FROM = 'error.reporter@yourcompany.com'
+# Optional Reply-To address:
+# REPLY_TO = 'error.reporter@yourcompany.com'
 # How often to send aggregated exception emails.
 FLUSH_SECONDS = 60
 
@@ -36,6 +38,8 @@ FLUSH_SECONDS = 60
 ###############################################################################
 # PAGER_TO = 'your.pager.address@yourcompany.com'
 # PAGER_FROM = 'error.reporter@yourcompany.com'
+# Optional Reply-To address:
+# PAGER_REPLY_TO = 'error.reporter@yourcompany.com'
 
 # If we receive PAGER_WINDOW_LIMIT exception in
 # PAGER_WINDOW_SIZE * FLUSH_SECONDS seconds, send a page to the configured
