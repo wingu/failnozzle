@@ -122,12 +122,14 @@ Some relevant settings are as follows:
   authenticating to the SMTP server
 * `REPORT_FROM`: the "From" address for summary emails sent by `failnozzle`
 * `REPORT_TO`: the destination address for summary emails
+* `REPLY_TO`: the address that should receive replies to summary emails
 * `JUST_MONITORING_REPORT_TO`: the destination address for reports that
   contain only "just monitoring" messages (for end-to-end monitoring)
 * `MONITORING_ERROR_MARKERS`: a list of marker strings that signals `failnozzle`
   to treat a message as "just monitoring"
 * `PAGER_FROM`: the "From" address for alert emails sent by `failnozzle`
 * `PAGER_TO`: the destination address for alert emails
+* `PAGER_REPLY_TO`: the address that should receive replies to alert emails
 * `FLUSH_SECONDS`: the number of seconds between flushes of `failnozzle`'s buffer
   (error emails will be sent no more frequently than this number of seconds)
 * `PAGER_WINDOW_SIZE`, `PAGER_WINDOW_LIMIT`: if more than

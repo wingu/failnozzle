@@ -258,9 +258,9 @@ def test_mailer_no_recips(send_email_mock):
     mailer([], subject, report)
     send_email_mock.assert_called_once_with(setting('REPORT_FROM', ''),
                                             setting('REPORT_TO', ''),
-                                            setting('REPLY_TO', ''),
                                             subject,
-                                            report)
+                                            report,
+                                            reply_to=setting('REPLY_TO', ''))
 
 
 @patch('gevent.joinall')
