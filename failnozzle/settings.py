@@ -34,7 +34,7 @@ FLUSH_SECONDS = 60
 ###############################################################################
 # If our exception count in a given window is higher than what we allow we'll #
 # send an additional email to the configured address.                         #
-# Recommended to set this to a PagerDuty or other altering mechanism.         #
+# Recommended to set this to a PagerDuty or other alerting mechanism.         #
 ###############################################################################
 # PAGER_TO = 'your.pager.address@yourcompany.com'
 # PAGER_FROM = 'error.reporter@yourcompany.com'
@@ -51,8 +51,9 @@ PAGER_LIMIT = 100
 ###############################################################################
 # Monitoring Configuration                                                    #
 ###############################################################################
-# Allows routing errors with specific strings in them to a different email    #
-# address. To monitor that systems are correctly sending to failnozzle.       #
+# If configured, sends errors with specific strings in them to a different    #
+# email address. This is useful to monitor that systems are correctly sending #
+# messages to failnozzle.                                                     #
 ###############################################################################
 # JUST_MONITORING_REPORT_TO = 'error.canary@yourcompany.com'
 

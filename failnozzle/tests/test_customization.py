@@ -18,7 +18,7 @@ sys.path.append(TEST_DIR + '/../..')
 
 # Make our custom unique error which has no fields in common with the default.
 # Allows us to make sure we can handle cases where the users idea of an
-# exception is completely differnet than ours.
+# exception is completely different than ours.
 #
 # namedtuples are class-like in usage, so ignore Pylint's objection
 # pylint: disable=C0103
@@ -71,7 +71,7 @@ def test_customization_tmpl(env_mock, fs_loader_mock):
 
     _, _, _ = _create_queue_rate_buffer()
 
-    # Make sure we loaded the expected tempaltes from the expected place.
+    # Make sure we loaded the expected templates from the expected place.
     fs_loader_mock.assert_called_once_with(CUSTOM_TEMP_DIR)
     env_inst.get_template.assert_called_with(CUSTOM_SUBJECT_TEMP)
     env_inst.get_template.assert_called_with(CUSTOM_BODY_TEMP)
