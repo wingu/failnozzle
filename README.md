@@ -1,3 +1,7 @@
+<table><tr><td align="center" height="100" valign="center">
+<strong>Failnozzle is not actively maintained. Please consider using its successor, <a href="https://github.com/hut8labs/failmail/">Failmail</a>.</strong>
+</td></tr></table>
+
 # failnozzle
 
 `failnozzle` is a standalone daemon that receives log messages as JSON objects over
